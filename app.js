@@ -1,3 +1,4 @@
+const path = require("path")
 const express = require("express")
 const dotenv = require("dotenv")
 const connectDB = require("./config/db")
@@ -20,6 +21,10 @@ if (process.env.NODE_ENV === "development") {
 // Handlebars
 app.engine(".hbs", exphbs.engine({ defaultLayout: "main", extname: ".hbs" }))
 app.set("view engine", ".hbs") // middleware to use hbs extension
+
+// Static folder
+app.use(express.static(path.join(__dirname, "public"))) // make public the static folder, use 'public' as the var name
+// app.use(express.static(__dirname + "/public"))
 
 // Routes
 app.use("/", require("./routes/index"))
