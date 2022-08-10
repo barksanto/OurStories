@@ -1,6 +1,9 @@
 const express = require("express")
 const dotenv = require("dotenv")
 const connectDB = require("./config/db")
+const exphbs = require("express-handlebars") // templates
+
+const morgan = require("morgan") // logging requests (https & network)
 
 // Load config
 dotenv.config({ path: "./config/config.env" }) // global variables
@@ -8,9 +11,18 @@ dotenv.config({ path: "./config/config.env" }) // global variables
 connectDB()
 
 const app = express()
+
+// Logging
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"))
+}
+
+// Handlebars
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }))
+app.set("view engine", ".hbs") // middleware to use hbs extension
+
 const PORT = process.env.PORT || 3000
 
-console.log(PORT)
 app.listen(
   PORT,
   console.log(
